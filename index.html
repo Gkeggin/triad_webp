@@ -15,7 +15,6 @@
       <p><strong>Researcher:</strong> Dr. Emma Stewart<br><strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
       <hr />
       <p>We would like to invite you to be part of this research project...</p>
-      <!-- shortened for brevity -->
       <button class="btn" onclick="showConsent()">Continue to Consent Form</button>
     </div>
   </div>
@@ -25,13 +24,15 @@
     <h1>Informed Consent</h1>
     <form id="consent-form" class="content-box">
       <p><strong>Please read and tick all boxes to continue:</strong></p>
-      <label><input type="checkbox" required /> I understand that my participation is voluntary.</label>
-      <label><input type="checkbox" required /> I understand that my data will be accessed by the research team.</label>
-      <label><input type="checkbox" required /> I understand my data will be stored securely.</label>
-      <label><input type="checkbox" required /> I understand I can withdraw at any time.</label>
-      <label><input type="checkbox" required /> I agree to take part in this study.</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" required /> I understand that my participation is voluntary.</label>
+        <label><input type="checkbox" required /> I understand that my data will be accessed by the research team.</label>
+        <label><input type="checkbox" required /> I understand my data will be stored securely.</label>
+        <label><input type="checkbox" required /> I understand I can withdraw at any time.</label>
+        <label><input type="checkbox" required /> I agree to take part in this study.</label>
+      </div>
       <h3>Demographics</h3>
-      <label>Age: <input type="number" id="age" required /></label>
+      <label>Age: <input type="number" id="age" required /></label><br>
       <label>Sex:
         <input type="radio" name="sex" value="Male" required /> Male
         <input type="radio" name="sex" value="Female" /> Female
@@ -82,7 +83,7 @@
   <!-- SCRIPT -->
   <script>
     const totalObjects = 75;
-    const totalRotations = 37; // 0 to 180 in 5° steps = 37 frames
+    const totalRotations = 37; // 0–180° in 5° steps
     const trials = [];
     const results = [];
     const sdNear = 2;
@@ -91,7 +92,7 @@
 
     const getParticipantID = () => {
       const params = new URLSearchParams(window.location.search);
-      return params.get("participant") || "anonymous";
+      return params.get("PROLIFIC_PID") || "anonymous";
     };
 
     function randn_bm() {
@@ -168,6 +169,7 @@
       const choiceType = choiceSide === "left" ? t.leftType : t.rightType;
 
       results.push({
+        timestamp: new Date().toISOString(),
         participant: t.participant,
         object: t.obj,
         ref: t.ref,
@@ -185,9 +187,21 @@
       if (trialIndex < trials.length) {
         showTrial(trialIndex);
       } else {
+        sendToGoogleSheet();
+      }
+    }
+
+    function sendToGoogleSheet() {
+      const url = "https://script.google.com/macros/s/AKfycbyOoyLVm2vrxD0J6x7vH92xhY8DyETfEEEpZ4EbbyxgKA9ouavdxPriGnGhmm7pbTU/exec";
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(results)
+      }).then(() => {
         document.getElementById("trial").style.display = "none";
         document.getElementById("end").style.display = "block";
-      }
+      });
     }
 
     document.querySelectorAll(".choice").forEach(el => {
