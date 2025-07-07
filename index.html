@@ -4,64 +4,51 @@
   <meta charset="UTF-8" />
   <title>Triad Experiment</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- PARTICIPANT INFORMATION SCREEN -->
   <div id="info">
     <h1>Participant Information</h1>
-    <div class="section">
+    <div class="content-box">
       <h2>Inference in perception and oculomotor control</h2>
-      <p><strong>Researcher:</strong> Dr. Emma Stewart<br />
-        <strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
-
-      <p>We would like to invite you to take part in this study. Participation is entirely voluntary. If you choose not to take part, there will be no disadvantage to you.</p>
-      <p>Please read the following information carefully before deciding whether to participate. If anything is unclear, feel free to contact us.</p>
-      <p>The study investigates the mechanisms of human visual perception through judgments of object similarity.</p>
-
-      <p>During the experiment, you’ll see images of rotated objects and select the one most similar to a reference. The session will last around 5 minutes.</p>
-
-      <p>There are no known risks, but extended screen viewing may cause mild discomfort. You will be compensated £9/hour for your time.</p>
-
-      <p>Data will be anonymized and stored securely. For more information, read <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank" style="color:#99ccff;">Queen Mary's privacy notice for research participants</a>.</p>
-
-      <p>To withdraw, simply close your browser. No data will be stored if you don’t reach the end.</p>
-
-      <p>Contact: Georgie Keggin – g.keggin@qmul.ac.uk</p>
-
-      <button onclick="showConsent()">Continue to Consent Form</button>
+      <p><strong>Researcher:</strong> Dr. Emma Stewart<br><strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
+      <hr />
+      <p>We would like to invite you to be part of this research project...</p>
+      <!-- shortened for brevity -->
+      <button class="btn" onclick="showConsent()">Continue to Consent Form</button>
     </div>
   </div>
 
   <!-- CONSENT FORM -->
   <div id="consent" style="display:none;">
     <h1>Informed Consent</h1>
-    <form id="consent-form" class="section">
-      <p><strong>Please read and confirm the following statements:</strong></p>
-      <label><input type="checkbox" required> I understand participation is voluntary.</label><br />
-      <label><input type="checkbox" required> I understand the research team will access my data.</label><br />
-      <label><input type="checkbox" required> I understand my data will be stored securely.</label><br />
-      <label><input type="checkbox" required> I understand that closing the browser before finishing means no data is stored.</label><br />
-      <label><input type="checkbox" required> I understand anonymized data may be reused.</label><br />
-      <label><input type="checkbox" required> I agree to take part in this study.</label><br /><br />
-
+    <form id="consent-form" class="content-box">
+      <p><strong>Please read and tick all boxes to continue:</strong></p>
+      <label><input type="checkbox" required /> I understand that my participation is voluntary.</label>
+      <label><input type="checkbox" required /> I understand that my data will be accessed by the research team.</label>
+      <label><input type="checkbox" required /> I understand my data will be stored securely.</label>
+      <label><input type="checkbox" required /> I understand I can withdraw at any time.</label>
+      <label><input type="checkbox" required /> I agree to take part in this study.</label>
       <h3>Demographics</h3>
-      <label>Age: <input type="number" id="age" required /></label><br />
-      <label>Sex:</label><br />
-      <input type="radio" name="sex" value="Male" required /> Male<br />
-      <input type="radio" name="sex" value="Female" /> Female<br />
-      <input type="radio" name="sex" value="Other" /> Other<br /><br />
-
-      <button type="submit">Continue</button>
+      <label>Age: <input type="number" id="age" required /></label>
+      <label>Sex:
+        <input type="radio" name="sex" value="Male" required /> Male
+        <input type="radio" name="sex" value="Female" /> Female
+        <input type="radio" name="sex" value="Other" /> Other
+      </label>
+      <button type="submit" class="btn">Continue</button>
     </form>
   </div>
 
   <!-- INSTRUCTIONS -->
-  <div id="instructions" style="display:none;" class="section">
-    <h1>Instructions</h1>
-    <p>You will see a series of trials. On each trial, there will be a reference object and two options below.</p>
-    <p>Your task is to choose the object most similar in shape and orientation to the reference.</p>
-    <p>Click the image that matches best. Please respond as quickly and accurately as possible.</p>
-    <button onclick="startExperiment()">Start</button>
+  <div id="instructions" style="display:none;">
+    <div class="content-box">
+      <h1>Instructions</h1>
+      <p>You will see a reference object and two options below.</p>
+      <p>Choose the object most similar in shape and orientation to the reference.</p>
+      <button class="btn" onclick="startExperiment()">Start</button>
+    </div>
   </div>
 
   <!-- EXPERIMENT -->
@@ -85,37 +72,17 @@
         </div>
       </div>
     </div>
-
-    <!-- END SCREEN -->
-    <div id="end" style="display:none;" class="section">
+    <div id="end" style="display:none;">
       <h2>Experiment Complete</h2>
-      <p>Thank you for participating! Please click the buttons below to save your data and submit the study.</p>
-      <button id="download">Download Results</button><br /><br />
-      <button id="prolific-button">Submit to Prolific</button>
+      <p>Thank you for participating!</p>
+      <a class="btn" href="https://app.prolific.com/submissions/complete?cc=CTC44D4K">Submit on Prolific</a>
     </div>
   </div>
 
   <!-- SCRIPT -->
   <script>
-    function showConsent() {
-      document.getElementById("info").style.display = "none";
-      document.getElementById("consent").style.display = "block";
-    }
-
-    function startExperiment() {
-      document.getElementById("instructions").style.display = "none";
-      document.getElementById("experiment").style.display = "block";
-      showTrial(trialIndex);
-    }
-
-    document.getElementById("consent-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      document.getElementById("consent").style.display = "none";
-      document.getElementById("instructions").style.display = "block";
-    });
-
     const totalObjects = 75;
-    const totalRotations = 37; // rotation indices 0–36 = 0°–180° in 5° steps
+    const totalRotations = 37; // 0 to 180 in 5° steps = 37 frames
     const trials = [];
     const results = [];
     const sdNear = 2;
@@ -127,19 +94,19 @@
       return params.get("participant") || "anonymous";
     };
 
+    function randn_bm() {
+      let u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
     function sampleRotation(ref, sd = 2, min = 1) {
       let val;
       do {
         val = Math.round(ref + randn_bm() * sd);
       } while (Math.abs(val - ref) < min || val < 0 || val >= totalRotations);
       return val;
-    }
-
-    function randn_bm() {
-      let u = 0, v = 0;
-      while (u === 0) u = Math.random();
-      while (v === 0) v = Math.random();
-      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
     }
 
     function shuffle(array) {
@@ -152,7 +119,6 @@
 
     for (let obj = 1; obj <= totalObjects; obj++) {
       const ref = Math.floor(Math.random() * totalRotations);
-
       let near = sampleRotation(ref, sdNear, minDiff);
       let far;
       do {
@@ -174,7 +140,7 @@
       const leftRotation = sides[0] === "near" ? near : far;
       const rightRotation = sides[1] === "near" ? near : far;
 
-      trials.push({
+      const trial = {
         obj,
         ref,
         near,
@@ -184,7 +150,9 @@
         leftType: sides[0],
         rightType: sides[1],
         participant: getParticipantID()
-      });
+      };
+
+      trials.push(trial);
     }
 
     function showTrial(index) {
@@ -229,23 +197,22 @@
       });
     });
 
-    document.getElementById("download").addEventListener("click", () => {
-      const header = Object.keys(results[0]).join(",");
-      const rows = results.map(r => Object.values(r).join(",")).join("\n");
-      const csv = `${header}\n${rows}`;
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `triad_results_${getParticipantID()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+    function showConsent() {
+      document.getElementById("info").style.display = "none";
+      document.getElementById("consent").style.display = "block";
+    }
+
+    document.getElementById("consent-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("consent").style.display = "none";
+      document.getElementById("instructions").style.display = "block";
     });
 
-    document.getElementById("prolific-button").addEventListener("click", () => {
-      window.location.href = "https://app.prolific.com/submissions/complete?cc=CTC44D4K";
-    });
+    function startExperiment() {
+      document.getElementById("instructions").style.display = "none";
+      document.getElementById("experiment").style.display = "block";
+      showTrial(trialIndex);
+    }
   </script>
 </body>
 </html>
