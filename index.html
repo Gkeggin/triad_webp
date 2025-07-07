@@ -4,111 +4,115 @@
   <meta charset="UTF-8">
   <title>Triad Experiment</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- PARTICIPANT INFORMATION SCREEN -->
+
+  <!-- PARTICIPANT INFORMATION -->
   <div id="info">
-    <h1>Participant Information</h1>
-    <div style="text-align: left; max-width: 800px; margin: 0 auto; color: white;">
-      <h2>Inference in perception and oculomotor control</h2>
-      <p><strong>Researcher:</strong> Dr. Emma Stewart<br>
-      <strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
-
-      <h3>General Information:</h3>
-      <p>We would like to invite you to be part of this research project, if you would like to. You should only agree to take part if you want to, it is entirely up to you. If you choose not to take part, there won't be any disadvantages for you and you will hear no more about it.</p>
-
-      <p>Please read the following information carefully before you decide to take part; this will tell you why the research is being done and what you will be asked to do if you take part. Please ask if there is anything that is not clear or if you would like more information.</p>
-
-      <p>If you decide to take part, you will be asked to sign the attached form to say that you agree. You are still free to withdraw at any time and without giving a reason.</p>
-
-      <h3>Purpose of study:</h3>
-      <p>The purpose of this study is to gain a deeper understanding of the mechanisms underlying human visual perception.</p>
-
-      <h3>Procedure:</h3>
-      <p>During the course of the experiment you will be presented with a series of images or movies of objects on the screen. You will be asked to make subjective decisions about the images (e.g. choosing objects to report, and matching objects) and to provide responses using the screen, mouse or keyboard. Specific details about the images, judgments and responses are provided on the Instruction Page. The duration of the experiment depends on the speed of your responses but is expected to be roughly 5 minutes.</p>
-
-      <h3>Potential risks, side effects, or discomfort:</h3>
-      <p>No known risks or side effects are associated with participation in this experiment. Extensive viewing of a screen can lead to discomfort.</p>
-
-      <h3>Uses and benefits of the experiment:</h3>
-      <p>There are no further benefits to you as a result of participating in this experiment, other than monetary remuneration. You will be paid 9 GBP an hour for your time. However, we seek to use the results to make inferences about human brain processes underlying visual perception. We aim to publish our conclusions in scientific journals. In the long run, results like the ones from this experiment may be useful for numerous other research areas, including the development of computer graphics techniques, machine learning and artificial intelligence, and the diagnosis of psychological disorders.</p>
-
-      <h3>What will happen with my data?</h3>
-      <p>All data collected will be fully anonymized... (rest of your paragraph)...</p>
-
-      <p>Please read <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank" style="color:#99ccff;">Queen Mary's privacy notice for research participants</a>.</p>
-
-      <h3>What will happen if I want to withdraw from this study?</h3>
-      <p>You are free to withdraw at any point throughout the duration of the experiment... (rest of your paragraph)...</p>
-
-      <p>If you have any questions...<br>
-      Georgie Keggin: g.keggin@qmul.ac.uk</p>
-
-      <button onclick="showConsent()" style="margin-top: 20px;">Continue to Consent Form</button>
+    <div class="container">
+      <h1>Participant Information</h1>
+      <div class="section">
+        <h2>Inference in Perception and Oculomotor Control</h2>
+        <p><strong>Researcher:</strong> Dr. Emma Stewart<br>
+        <strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
+      </div>
+      <div class="section">
+        <h3>General Information</h3>
+        <p>We would like to invite you to be part of this research project. Your participation is voluntary, and you may withdraw at any time.</p>
+        <p>Please read the following carefully to understand the purpose of the research and your involvement. If you have any questions, feel free to contact the researcher.</p>
+      </div>
+      <div class="section">
+        <h3>Purpose of Study</h3>
+        <p>This study aims to understand the mechanisms of human visual perception.</p>
+      </div>
+      <div class="section">
+        <h3>Procedure</h3>
+        <p>You will be shown images and asked to match them based on shape and orientation. This will take approximately 5 minutes.</p>
+      </div>
+      <div class="section">
+        <h3>Risks & Benefits</h3>
+        <p>There are no known risks. You will be paid £9/hour. Results may help improve research in perception, AI, and mental health.</p>
+      </div>
+      <div class="section">
+        <h3>Data Usage</h3>
+        <p>Your data is anonymous. You can withdraw at any time before submission. After submission, anonymization prevents deletion. See <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank">Queen Mary’s privacy notice</a>.</p>
+      </div>
+      <div class="section">
+        <p><strong>Contact:</strong> Georgie Keggin (g.keggin@qmul.ac.uk)</p>
+      </div>
+      <button onclick="showConsent()">Continue to Consent</button>
     </div>
   </div>
 
   <!-- CONSENT FORM -->
   <div id="consent" style="display:none;">
-    <h1>Informed Consent</h1>
-    <form id="consent-form">
-      <p><strong>Please read and respond to all the following statements:</strong></p>
-      <label><input type="checkbox" required> I understand that my participation is voluntary...</label><br>
-      <label><input type="checkbox" required> I understand that my data will be accessed by the research team.</label><br>
-      <label><input type="checkbox" required> I understand my data will be stored securely...</label><br>
-      <label><input type="checkbox" required> I understand that withdrawing before submission means no data is stored.</label><br>
-      <label><input type="checkbox" required> I understand my data may be reused in anonymized form.</label><br>
-      <label><input type="checkbox" required> I agree to take part in this study.</label><br><br>
-
-      <h3>Demographics</h3>
-      <label>What is your age? <input type="number" id="age" required></label><br>
-      <label>What is your sex?</label><br>
-      <input type="radio" name="sex" value="Male" required> Male<br>
-      <input type="radio" name="sex" value="Female"> Female<br>
-      <input type="radio" name="sex" value="Other"> Other<br><br>
-
-      <button type="submit">Continue</button>
-    </form>
+    <div class="container">
+      <h1>Informed Consent</h1>
+      <form id="consent-form">
+        <div class="section">
+          <p><strong>Please tick all statements you agree with:</strong></p>
+          <label><input type="checkbox" required> I understand that my participation is voluntary.</label><br>
+          <label><input type="checkbox" required> I understand that my data will be accessed by the research team.</label><br>
+          <label><input type="checkbox" required> I understand my data will be stored securely.</label><br>
+          <label><input type="checkbox" required> I understand withdrawing before submission means no data is stored.</label><br>
+          <label><input type="checkbox" required> I understand my data may be reused in anonymized form.</label><br>
+          <label><input type="checkbox" required> I agree to take part in this study.</label>
+        </div>
+        <div class="section">
+          <h3>Demographics</h3>
+          <label>Age: <input type="number" id="age" required></label><br>
+          <label>Sex:</label><br>
+          <input type="radio" name="sex" value="Male" required> Male<br>
+          <input type="radio" name="sex" value="Female"> Female<br>
+          <input type="radio" name="sex" value="Other"> Other
+        </div>
+        <button type="submit">Continue</button>
+      </form>
+    </div>
   </div>
 
   <!-- INSTRUCTIONS -->
-  <div id="instructions" style="display:none; text-align:center; color:white;">
-    <h1>Instructions</h1>
-    <p>You will see a series of trials. On each trial, there will be a reference object and two options below.</p>
-    <p>Your task is to choose the object most similar in shape and orientation to the reference.</p>
-    <p>Click the image that matches best. Please respond as quickly and accurately as you can.</p>
-    <button onclick="startExperiment()">Start</button>
+  <div id="instructions" style="display:none;">
+    <div class="container">
+      <h1>Instructions</h1>
+      <p>On each trial, you will see a reference object and two options.</p>
+      <p>Select the object that is most similar in shape and orientation to the reference.</p>
+      <p>Please respond as quickly and accurately as possible.</p>
+      <button onclick="startExperiment()">Start</button>
+    </div>
   </div>
 
   <!-- EXPERIMENT -->
   <div id="experiment" style="display:none;">
-    <div id="trial">
-      <p id="trial-count"></p>
-      <div id="images">
-        <div>
-          <p><strong>Reference</strong></p>
-          <img id="reference" class="stim" />
-        </div>
-        <div id="choices">
+    <div class="container">
+      <div id="trial">
+        <p id="trial-count"></p>
+        <div id="images">
           <div>
-            <p>Option A</p>
-            <img id="choice-left" class="stim choice" data-side="left" />
+            <p><strong>Reference</strong></p>
+            <img id="reference" class="stim" />
           </div>
-          <div>
-            <p>Option B</p>
-            <img id="choice-right" class="stim choice" data-side="right" />
+          <div id="choices">
+            <div>
+              <p>Option A</p>
+              <img id="choice-left" class="stim choice" data-side="left" />
+            </div>
+            <div>
+              <p>Option B</p>
+              <img id="choice-right" class="stim choice" data-side="right" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div id="end" style="display:none;">
-      <h2>Experiment Complete</h2>
-      <p>Click below to download your data.</p>
-      <button id="download">Download Results</button>
+      <div id="end" style="display:none;">
+        <h2>Experiment Complete</h2>
+        <p>Click below to download your results.</p>
+        <button id="download">Download Results</button>
+      </div>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
   <script>
     function showConsent() {
       document.getElementById("info").style.display = "none";
@@ -128,11 +132,12 @@
     });
 
     const totalObjects = 75;
-    const totalRotations = 75;
+    const minRotationIndex = 0;
+    const maxRotationIndex = 36;
     const trials = [];
     const results = [];
-    const sdNear = 10;
-    const minDiff = 10;
+    const sdNear = 2;
+    const minDiff = 2;
     let trialIndex = 0;
 
     const getParticipantID = () => {
@@ -140,11 +145,15 @@
       return params.get("participant") || "anonymous";
     };
 
-    function sampleRotation(ref, sd = 10, min = 1) {
+    function sampleRotation(ref, sd = 2, min = 1) {
       let val;
       do {
         val = Math.round(ref + randn_bm() * sd);
-      } while (Math.abs(val - ref) < min || val < 0 || val >= totalRotations);
+      } while (
+        Math.abs(val - ref) < min ||
+        val < minRotationIndex ||
+        val > maxRotationIndex
+      );
       return val;
     }
 
@@ -164,33 +173,28 @@
     }
 
     for (let obj = 1; obj <= totalObjects; obj++) {
-      const ref = Math.floor(Math.random() * totalRotations);
+      const ref = Math.floor(Math.random() * (maxRotationIndex + 1));
 
-      // Sample near and far ensuring they're not the same and far > near
       let near = sampleRotation(ref, sdNear, minDiff);
       let far;
       do {
         far = sampleRotation(ref, sdNear * 2, minDiff);
       } while (
-        Math.abs(far - near) < minDiff || 
-        far === ref || 
-        near === ref || 
+        Math.abs(far - near) < minDiff ||
+        far === ref ||
+        near === ref ||
         far === near
       );
 
-      // Ensure far is greater than near (in terms of angular distance from ref)
       const nearDiff = Math.abs(near - ref);
       const farDiff = Math.abs(far - ref);
-      if (farDiff < nearDiff) {
-        [near, far] = [far, near]; // swap if needed
-      }
+      if (farDiff < nearDiff) [near, far] = [far, near];
 
-      // Randomly assign sides
       const sides = shuffle(["near", "far"]);
       const leftRotation = sides[0] === "near" ? near : far;
       const rightRotation = sides[1] === "near" ? near : far;
 
-      const trial = {
+      trials.push({
         obj,
         ref,
         near,
@@ -200,14 +204,8 @@
         leftType: sides[0],
         rightType: sides[1],
         participant: getParticipantID()
-      };
-
-      // DEBUG: check values in browser console
-      console.log(`obj ${obj}: ref=${ref}, near=${near}, far=${far}, left=${leftRotation}, right=${rightRotation}`);
-
-      trials.push(trial);
+      });
     }
-
 
     function showTrial(index) {
       const t = trials[index];
