@@ -78,40 +78,50 @@
       } while (Math.abs(far - near) < minDiff || far === ref);
 
       const sides = shuffle(["left", "right"]);
-      const nearSide = sides[0];
-      const farSide = sides[1];
+      const leftRotation = sides[0] === "near" ? near : far;
+      const rightRotation = sides[1] === "near" ? near : far;
 
-      trials.push({ obj, ref, near, far, nearSide, farSide });
+      const trial = {
+        obj,
+        ref,
+        near,
+        far,
+        leftRotation,
+        rightRotation,
+        leftType: leftRotation === near ? "near" : "far",
+        rightType: rightRotation === near ? "near" : "far",
+        participant: getParticipantID()
+      };
+
+      trials.push(trial);
     }
 
+
     function showTrial(index) {
-        const t = trials[index];
-        document.getElementById("trial-count").textContent = `Trial ${index + 1} of ${trials.length}`;
-        document.getElementById("reference").src = `objs/${t.obj}/${t.obj}rot_${t.ref}.webp`;
-
-        // Explicitly map side to rotation value (avoids undefined errors)
-        const leftRotation = t.nearSide === "left" ? t.near : t.far;
-        const rightRotation = t.farSide === "right" ? t.far : t.near;
-
-        document.getElementById("choice-left").src = `objs/${t.obj}/${t.obj}rot_${leftRotation}.webp`;
-        document.getElementById("choice-right").src = `objs/${t.obj}/${t.obj}rot_${rightRotation}.webp`;
+      const t = trials[index];
+      document.getElementById("trial-count").textContent = `Trial ${index + 1} of ${trials.length}`;
+      document.getElementById("reference").src = `objs/${t.obj}/${t.obj}rot_${t.ref}.webp`;
+      document.getElementById("choice-left").src = `objs/${t.obj}/${t.obj}rot_${t.leftRotation}.webp`;
+      document.getElementById("choice-right").src = `objs/${t.obj}/${t.obj}rot_${t.rightRotation}.webp`;
     }
 
 
     function recordResponse(choiceSide) {
       const t = trials[trialIndex];
-      const participant = getParticipantID();
-      const choice = choiceSide === t.nearSide ? "near" : "far";
+      const choiceType = choiceSide === "left" ? t.leftType : t.rightType;
 
       results.push({
-        participant,
+        participant: t.participant,
         object: t.obj,
         ref: t.ref,
         near: t.near,
         far: t.far,
-        nearSide: t.nearSide,
+        leftRotation: t.leftRotation,
+        rightRotation: t.rightRotation,
+        leftType: t.leftType,
+        rightType: t.rightType,
         choiceSide,
-        choice
+        choiceType
       });
 
       trialIndex++;
@@ -122,6 +132,7 @@
         document.getElementById("end").style.display = "block";
       }
     }
+
 
     document.querySelectorAll(".choice").forEach(el => {
       el.addEventListener("click", e => {
