@@ -171,9 +171,10 @@
         far = sampleRotation(ref, sdNear * 2, minDiff);
       } while (Math.abs(far - near) < minDiff || far === ref);
 
-      const sides = shuffle(["left", "right"]);
-      const leftRotation = sides[0] === "near" ? near : far;
-      const rightRotation = sides[1] === "near" ? near : far;
+      const types = shuffle(["near", "far"]);
+      const leftRotation = types[0] === "near" ? near : far;
+      const rightRotation = types[1] === "near" ? near : far;
+
 
       const trial = {
         obj,
@@ -182,10 +183,11 @@
         far,
         leftRotation,
         rightRotation,
-        leftType: leftRotation === near ? "near" : "far",
-        rightType: rightRotation === near ? "near" : "far",
+        leftType: types[0],
+        rightType: types[1],
         participant: getParticipantID()
       };
+
 
       trials.push(trial);
     }
