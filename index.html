@@ -85,12 +85,18 @@
     }
 
     function showTrial(index) {
-      const t = trials[index];
-      document.getElementById("trial-count").textContent = `Trial ${index + 1} of ${trials.length}`;
-      document.getElementById("reference").src = `objs/${t.obj}/${t.obj}rot_${t.ref}.webp`;
-      document.getElementById("choice-left").src = `objs/${t.obj}/${t.obj}rot_${t[t.nearSide]}.webp`;
-      document.getElementById("choice-right").src = `objs/${t.obj}/${t.obj}rot_${t[t.farSide]}.webp`;
+        const t = trials[index];
+        document.getElementById("trial-count").textContent = `Trial ${index + 1} of ${trials.length}`;
+        document.getElementById("reference").src = `objs/${t.obj}/${t.obj}rot_${t.ref}.webp`;
+
+        // Explicitly map side to rotation value (avoids undefined errors)
+        const leftRotation = t.nearSide === "left" ? t.near : t.far;
+        const rightRotation = t.farSide === "right" ? t.far : t.near;
+
+        document.getElementById("choice-left").src = `objs/${t.obj}/${t.obj}rot_${leftRotation}.webp`;
+        document.getElementById("choice-right").src = `objs/${t.obj}/${t.obj}rot_${rightRotation}.webp`;
     }
+
 
     function recordResponse(choiceSide) {
       const t = trials[trialIndex];
