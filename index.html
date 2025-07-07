@@ -165,16 +165,30 @@
 
     for (let obj = 1; obj <= totalObjects; obj++) {
       const ref = Math.floor(Math.random() * totalRotations);
-      const near = sampleRotation(ref, sdNear, minDiff);
+
+      // Sample near and far ensuring they're not the same and far > near
+      let near = sampleRotation(ref, sdNear, minDiff);
       let far;
       do {
         far = sampleRotation(ref, sdNear * 2, minDiff);
-      } while (Math.abs(far - near) < minDiff || far === ref);
+      } while (
+        Math.abs(far - near) < minDiff || 
+        far === ref || 
+        near === ref || 
+        far === near
+      );
 
-      const types = shuffle(["near", "far"]);
-      const leftRotation = types[0] === "near" ? near : far;
-      const rightRotation = types[1] === "near" ? near : far;
+      // Ensure far is greater than near (in terms of angular distance from ref)
+      const nearDiff = Math.abs(near - ref);
+      const farDiff = Math.abs(far - ref);
+      if (farDiff < nearDiff) {
+        [near, far] = [far, near]; // swap if needed
+      }
 
+      // Randomly assign sides
+      const sides = shuffle(["near", "far"]);
+      const leftRotation = sides[0] === "near" ? near : far;
+      const rightRotation = sides[1] === "near" ? near : far;
 
       const trial = {
         obj,
@@ -183,14 +197,17 @@
         far,
         leftRotation,
         rightRotation,
-        leftType: types[0],
-        rightType: types[1],
+        leftType: sides[0],
+        rightType: sides[1],
         participant: getParticipantID()
       };
 
+      // DEBUG: check values in browser console
+      console.log(`obj ${obj}: ref=${ref}, near=${near}, far=${far}, left=${leftRotation}, right=${rightRotation}`);
 
       trials.push(trial);
     }
+
 
     function showTrial(index) {
       const t = trials[index];
