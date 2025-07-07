@@ -14,8 +14,7 @@
       <h2>Inference in perception and oculomotor control</h2>
       <p><strong>Researcher:</strong> Dr. Emma Stewart<br><strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
       <hr>
-      <h3>General Information:</h3>
-      <p>We would like to invite you to be part of this research project... (full text unchanged)</p>
+      <p>We would like to invite you to be part of this research project... (full text)</p>
       <p>Please read <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank">Queen Mary's privacy notice</a>.</p>
       <p>If you have any questions, contact Georgie Keggin: g.keggin@qmul.ac.uk</p>
       <button class="btn" onclick="showConsent()">Continue to Consent Form</button>
@@ -135,7 +134,7 @@
       if (farDiff < nearDiff) [near, far] = [far, near];
 
       const sides = shuffle(["near", "far"]);
-      const trial = {
+      trials.push({
         obj,
         ref,
         near,
@@ -145,8 +144,7 @@
         leftType: sides[0],
         rightType: sides[1],
         isCatch: false
-      };
-      trials.push(trial);
+      });
     }
 
     function showTrial(index) {
@@ -161,36 +159,31 @@
     function recordResponse(choiceSide) {
       const t = trials[trialIndex];
       const rt = (Date.now() - trialStartTime) / 1000;
-      if (rt < 0.1 || rt > 10) {
-        console.warn("RT out of range:", rt);
-        trialIndex++;
-        if (trialIndex < trials.length) {
-          showTrial(trialIndex);
-        } else {
-          document.getElementById("trial").style.display = "none";
-          document.getElementById("end").style.display = "block";
-        }
-        return;
-      }
 
-      results.push({
-        timestamp: new Date().toISOString(),
-        participant: participantInfo.participant,
-        age: participantInfo.age,
-        sex: participantInfo.sex,
-        object: t.obj,
-        ref: t.ref,
-        near: t.near,
-        far: t.far,
-        leftRotation: t.leftRotation,
-        rightRotation: t.rightRotation,
-        leftType: t.leftType,
-        rightType: t.rightType,
-        choiceSide,
-        choiceType: choiceSide === "left" ? t.leftType : t.rightType,
-        reactionTime: rt.toFixed(3),
-        isCatch: t.isCatch
-      });
+      const validRT = rt >= 0.1 && rt <= 10;
+
+      if (validRT) {
+        results.push({
+          timestamp: new Date().toISOString(),
+          participant: participantInfo.participant,
+          age: participantInfo.age,
+          sex: participantInfo.sex,
+          object: t.obj,
+          ref: t.ref,
+          near: t.near,
+          far: t.far,
+          leftRotation: t.leftRotation,
+          rightRotation: t.rightRotation,
+          leftType: t.leftType,
+          rightType: t.rightType,
+          choiceSide,
+          choiceType: choiceSide === "left" ? t.leftType : t.rightType,
+          reactionTime: rt.toFixed(3),
+          isCatch: t.isCatch
+        });
+      } else {
+        console.warn("RT out of range:", rt);
+      }
 
       trialIndex++;
       if (trialIndex < trials.length) {
@@ -208,8 +201,8 @@
         body: JSON.stringify(results),
         headers: { "Content-Type": "application/json" }
       })
-      .then(res => console.log("Submitted to Google Sheets"))
-      .catch(err => console.error("Error submitting:", err));
+      .then(res => console.log("✅ Submitted to Google Sheets"))
+      .catch(err => console.error("❌ Submission error:", err));
     }
 
     document.querySelectorAll(".choice").forEach(el => {
