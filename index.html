@@ -1,118 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Triad Experiment</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- PARTICIPANT INFORMATION -->
+  <!-- PARTICIPANT INFORMATION SCREEN -->
   <div id="info">
-    <div class="container">
-      <h1>Participant Information</h1>
-      <div class="section">
-        <h2>Inference in Perception and Oculomotor Control</h2>
-        <p><strong>Researcher:</strong> Dr. Emma Stewart<br>
+    <h1>Participant Information</h1>
+    <div class="section">
+      <h2>Inference in perception and oculomotor control</h2>
+      <p><strong>Researcher:</strong> Dr. Emma Stewart<br />
         <strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
-      </div>
-      <div class="section">
-        <h3>General Information</h3>
-        <p>We would like to invite you to be part of this research project. Your participation is voluntary, and you may withdraw at any time.</p>
-        <p>Please read the following carefully to understand the purpose of the research and your involvement. If you have any questions, feel free to contact the researcher.</p>
-      </div>
-      <div class="section">
-        <h3>Purpose of Study</h3>
-        <p>This study aims to understand the mechanisms of human visual perception.</p>
-      </div>
-      <div class="section">
-        <h3>Procedure</h3>
-        <p>You will be shown images and asked to match them based on shape and orientation. This will take approximately 5 minutes.</p>
-      </div>
-      <div class="section">
-        <h3>Risks & Benefits</h3>
-        <p>There are no known risks. You will be paid £9/hour. Results may help improve research in perception, AI, and mental health.</p>
-      </div>
-      <div class="section">
-        <h3>Data Usage</h3>
-        <p>Your data is anonymous. You can withdraw at any time before submission. After submission, anonymization prevents deletion. See <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank">Queen Mary’s privacy notice</a>.</p>
-      </div>
-      <div class="section">
-        <p><strong>Contact:</strong> Georgie Keggin (g.keggin@qmul.ac.uk)</p>
-      </div>
-      <button onclick="showConsent()">Continue to Consent</button>
+
+      <p>We would like to invite you to take part in this study. Participation is entirely voluntary. If you choose not to take part, there will be no disadvantage to you.</p>
+      <p>Please read the following information carefully before deciding whether to participate. If anything is unclear, feel free to contact us.</p>
+      <p>The study investigates the mechanisms of human visual perception through judgments of object similarity.</p>
+
+      <p>During the experiment, you’ll see images of rotated objects and select the one most similar to a reference. The session will last around 5 minutes.</p>
+
+      <p>There are no known risks, but extended screen viewing may cause mild discomfort. You will be compensated £9/hour for your time.</p>
+
+      <p>Data will be anonymized and stored securely. For more information, read <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank" style="color:#99ccff;">Queen Mary's privacy notice for research participants</a>.</p>
+
+      <p>To withdraw, simply close your browser. No data will be stored if you don’t reach the end.</p>
+
+      <p>Contact: Georgie Keggin – g.keggin@qmul.ac.uk</p>
+
+      <button onclick="showConsent()">Continue to Consent Form</button>
     </div>
   </div>
 
   <!-- CONSENT FORM -->
   <div id="consent" style="display:none;">
-    <div class="container">
-      <h1>Informed Consent</h1>
-      <form id="consent-form">
-        <div class="section">
-          <p><strong>Please tick all statements you agree with:</strong></p>
-          <label><input type="checkbox" required> I understand that my participation is voluntary.</label><br>
-          <label><input type="checkbox" required> I understand that my data will be accessed by the research team.</label><br>
-          <label><input type="checkbox" required> I understand my data will be stored securely.</label><br>
-          <label><input type="checkbox" required> I understand withdrawing before submission means no data is stored.</label><br>
-          <label><input type="checkbox" required> I understand my data may be reused in anonymized form.</label><br>
-          <label><input type="checkbox" required> I agree to take part in this study.</label>
-        </div>
-        <div class="section">
-          <h3>Demographics</h3>
-          <label>Age: <input type="number" id="age" required></label><br>
-          <label>Sex:</label><br>
-          <input type="radio" name="sex" value="Male" required> Male<br>
-          <input type="radio" name="sex" value="Female"> Female<br>
-          <input type="radio" name="sex" value="Other"> Other
-        </div>
-        <button type="submit">Continue</button>
-      </form>
-    </div>
+    <h1>Informed Consent</h1>
+    <form id="consent-form" class="section">
+      <p><strong>Please read and confirm the following statements:</strong></p>
+      <label><input type="checkbox" required> I understand participation is voluntary.</label><br />
+      <label><input type="checkbox" required> I understand the research team will access my data.</label><br />
+      <label><input type="checkbox" required> I understand my data will be stored securely.</label><br />
+      <label><input type="checkbox" required> I understand that closing the browser before finishing means no data is stored.</label><br />
+      <label><input type="checkbox" required> I understand anonymized data may be reused.</label><br />
+      <label><input type="checkbox" required> I agree to take part in this study.</label><br /><br />
+
+      <h3>Demographics</h3>
+      <label>Age: <input type="number" id="age" required /></label><br />
+      <label>Sex:</label><br />
+      <input type="radio" name="sex" value="Male" required /> Male<br />
+      <input type="radio" name="sex" value="Female" /> Female<br />
+      <input type="radio" name="sex" value="Other" /> Other<br /><br />
+
+      <button type="submit">Continue</button>
+    </form>
   </div>
 
   <!-- INSTRUCTIONS -->
-  <div id="instructions" style="display:none;">
-    <div class="container">
-      <h1>Instructions</h1>
-      <p>On each trial, you will see a reference object and two options.</p>
-      <p>Select the object that is most similar in shape and orientation to the reference.</p>
-      <p>Please respond as quickly and accurately as possible.</p>
-      <button onclick="startExperiment()">Start</button>
-    </div>
+  <div id="instructions" style="display:none;" class="section">
+    <h1>Instructions</h1>
+    <p>You will see a series of trials. On each trial, there will be a reference object and two options below.</p>
+    <p>Your task is to choose the object most similar in shape and orientation to the reference.</p>
+    <p>Click the image that matches best. Please respond as quickly and accurately as possible.</p>
+    <button onclick="startExperiment()">Start</button>
   </div>
 
   <!-- EXPERIMENT -->
   <div id="experiment" style="display:none;">
-    <div class="container">
-      <div id="trial">
-        <p id="trial-count"></p>
-        <div id="images">
+    <div id="trial">
+      <p id="trial-count"></p>
+      <div id="images">
+        <div>
+          <p><strong>Reference</strong></p>
+          <img id="reference" class="stim" />
+        </div>
+        <div id="choices">
           <div>
-            <p><strong>Reference</strong></p>
-            <img id="reference" class="stim" />
+            <p>Option A</p>
+            <img id="choice-left" class="stim choice" data-side="left" />
           </div>
-          <div id="choices">
-            <div>
-              <p>Option A</p>
-              <img id="choice-left" class="stim choice" data-side="left" />
-            </div>
-            <div>
-              <p>Option B</p>
-              <img id="choice-right" class="stim choice" data-side="right" />
-            </div>
+          <div>
+            <p>Option B</p>
+            <img id="choice-right" class="stim choice" data-side="right" />
           </div>
         </div>
       </div>
-      <div id="end" style="display:none;">
-        <h2>Experiment Complete</h2>
-        <p>Click below to download your results.</p>
-        <button id="download">Download Results</button>
-      </div>
+    </div>
+
+    <!-- END SCREEN -->
+    <div id="end" style="display:none;" class="section">
+      <h2>Experiment Complete</h2>
+      <p>Thank you for participating! Please click the buttons below to save your data and submit the study.</p>
+      <button id="download">Download Results</button><br /><br />
+      <button id="prolific-button">Submit to Prolific</button>
     </div>
   </div>
 
+  <!-- SCRIPT -->
   <script>
     function showConsent() {
       document.getElementById("info").style.display = "none";
@@ -125,15 +108,14 @@
       showTrial(trialIndex);
     }
 
-    document.getElementById("consent-form").addEventListener("submit", function(e) {
+    document.getElementById("consent-form").addEventListener("submit", function (e) {
       e.preventDefault();
       document.getElementById("consent").style.display = "none";
       document.getElementById("instructions").style.display = "block";
     });
 
     const totalObjects = 75;
-    const minRotationIndex = 0;
-    const maxRotationIndex = 36;
+    const totalRotations = 37; // rotation indices 0–36 = 0°–180° in 5° steps
     const trials = [];
     const results = [];
     const sdNear = 2;
@@ -149,11 +131,7 @@
       let val;
       do {
         val = Math.round(ref + randn_bm() * sd);
-      } while (
-        Math.abs(val - ref) < min ||
-        val < minRotationIndex ||
-        val > maxRotationIndex
-      );
+      } while (Math.abs(val - ref) < min || val < 0 || val >= totalRotations);
       return val;
     }
 
@@ -173,7 +151,7 @@
     }
 
     for (let obj = 1; obj <= totalObjects; obj++) {
-      const ref = Math.floor(Math.random() * (maxRotationIndex + 1));
+      const ref = Math.floor(Math.random() * totalRotations);
 
       let near = sampleRotation(ref, sdNear, minDiff);
       let far;
@@ -188,7 +166,9 @@
 
       const nearDiff = Math.abs(near - ref);
       const farDiff = Math.abs(far - ref);
-      if (farDiff < nearDiff) [near, far] = [far, near];
+      if (farDiff < nearDiff) {
+        [near, far] = [far, near];
+      }
 
       const sides = shuffle(["near", "far"]);
       const leftRotation = sides[0] === "near" ? near : far;
@@ -261,6 +241,10 @@
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+    });
+
+    document.getElementById("prolific-button").addEventListener("click", () => {
+      window.location.href = "https://app.prolific.com/submissions/complete?cc=CTC44D4K";
     });
   </script>
 </body>
