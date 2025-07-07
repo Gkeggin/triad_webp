@@ -5,26 +5,6 @@
   <title>Triad Experiment</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpsHX1o8xyekSiMgtQosfY-1L9ftSwDCY",
-      authDomain: "triad-experiment.firebaseapp.com",
-      projectId: "triad-experiment",
-      storageBucket: "triad-experiment.appspot.com",
-      messagingSenderId: "328967553527",
-      appId: "1:328967553527:web:cbb37fe8f04124fe872ef2"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    window.db = getFirestore(app);
-    window.addDoc = addDoc;
-    window.collection = collection;
-  </script>
 </head>
 <body>
   <!-- PARTICIPANT INFORMATION -->
@@ -34,9 +14,9 @@
       <h2>Inference in perception and oculomotor control</h2>
       <p><strong>Researcher:</strong> Dr. Emma Stewart<br><strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
       <hr>
-      <p>We would like to invite you to be part of this research project... (full participant info text here)</p>
+      <p>We would like to invite you to be part of this research project... (full text)</p>
       <p>Please read <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank">Queen Mary's privacy notice</a>.</p>
-      <p>Questions? Contact Georgie Keggin: g.keggin@qmul.ac.uk</p>
+      <p>Contact Georgie Keggin: g.keggin@qmul.ac.uk</p>
       <button class="btn" onclick="showConsent()">Continue to Consent Form</button>
     </div>
   </div>
@@ -68,7 +48,7 @@
       <h1>Instructions</h1>
       <p>You will see a reference object and two options below.</p>
       <p>Choose the object most similar in shape and orientation to the reference.</p>
-      <p>Please respond as quickly and accurately as possible.</p>
+      <p>Please respond as quickly and accurately as you can.</p>
       <button class="btn" onclick="startExperiment()">Start</button>
     </div>
   </div>
@@ -101,7 +81,24 @@
     </div>
   </div>
 
+  <!-- SCRIPT -->
   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsHX1o8xyekSiMgtQosfY-1L9ftSwDCY",
+      authDomain: "triad-experiment.firebaseapp.com",
+      projectId: "triad-experiment",
+      storageBucket: "triad-experiment.appspot.com",
+      messagingSenderId: "328967553527",
+      appId: "1:328967553527:web:cbb37fe8f04124fe872ef2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const responsesRef = collection(db, "triadResponses");
+
     const totalObjects = 75;
     const totalRotations = 37;
     const sdNear = 2;
@@ -178,7 +175,6 @@
     function recordResponse(choiceSide) {
       const t = trials[trialIndex];
       const rt = (Date.now() - trialStartTime) / 1000;
-
       const validRT = rt >= 0.1 && rt <= 10;
 
       if (validRT) {
@@ -200,8 +196,6 @@
           reactionTime: rt.toFixed(3),
           isCatch: t.isCatch
         });
-      } else {
-        console.warn("RT out of range:", rt);
       }
 
       trialIndex++;
@@ -210,18 +204,18 @@
       } else {
         document.getElementById("trial").style.display = "none";
         document.getElementById("end").style.display = "block";
-        saveToFirestore();
+        sendDataToFirestore(results);
       }
     }
 
-    async function saveToFirestore() {
-      try {
-        for (const trial of results) {
-          await window.addDoc(window.collection(window.db, "triadResponses"), trial);
+    async function sendDataToFirestore(data) {
+      for (const trial of data) {
+        try {
+          await addDoc(responsesRef, trial);
+          console.log("✅ Saved:", trial);
+        } catch (error) {
+          console.error("❌ Error saving:", error);
         }
-        console.log("✅ Data saved to Firestore");
-      } catch (error) {
-        console.error("❌ Error saving to Firestore:", error);
       }
     }
 
@@ -253,6 +247,9 @@
       document.getElementById("experiment").style.display = "block";
       showTrial(trialIndex);
     }
+
+    window.showConsent = showConsent;
+    window.startExperiment = startExperiment;
   </script>
 </body>
 </html>
