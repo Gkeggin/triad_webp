@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Triad Experiment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="experiment">
+    <div id="trial">
+      <p id="trial-count"></p>
+      <div id="images">
+        <div>
+          <p><strong>Reference</strong></p>
+          <img id="reference" class="stim" />
+        </div>
+        <div id="choices">
+          <div>
+            <p>Option A</p>
+            <img id="choice-left" class="stim choice" data-side="left" />
+          </div>
+          <div>
+            <p>Option B</p>
+            <img id="choice-right" class="stim choice" data-side="right" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="end" style="display:none;">
+      <h2>Experiment Complete</h2>
+      <p>Click below to download your data.</p>
+      <button id="download">Download Results</button>
+    </div>
+  </div>
+  <script>
+    const totalObjects = 75;
+    const totalRotations = 75;
+    const trials = [];
+    const results = [];
+    const sdNear = 10;
+    const minDiff = 10;
+    let trialIndex = 0;
+
+    const getParticipantID = () => {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("participant") || "anonymous";
+    };
+
+    function sampleRotation(ref, sd = 10, min = 1) {
+      let val;
+      do {
+        val = Math.round(ref + randn_bm() * sd);
+      } while (Math.abs(val - ref) < min || val < 0 || val >= totalRotations);
+      return val;
+    }
+
+    function randn_bm() {
+      let u = 0, v = 0;
+      while(u === 0) u = Math.random();
+      while(v === 0) v = Math.random();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    for (let obj = 1; obj <= totalObjects; obj++) {
+      const ref = Math.floor(Math.random() * totalRotations);
+      const near = sampleRotation(ref, sdNear, minDiff);
+      let far;
+      do {
+        far = sampleRotation(ref, sdNear * 2, minDiff);
+      } while (Math.abs(far - near) < minDiff || far === ref);
+
+      const sides = shuffle(["left", "right"]);
+      const nearSide = sides[0];
+      const farSide = sides[1];
+
+      trials.push({ obj, ref, near, far, nearSide, farSide });
+    }
+
+    function showTrial(index) {
+      const t = trials[index];
+      document.getElementById("trial-count").textContent = `Trial ${index + 1} of ${trials.length}`;
+      document.getElementById("reference").src = `objs/${t.obj}/${t.obj}rot_${t.ref}.webp`;
+      document.getElementById("choice-left").src = `objs/${t.obj}/${t.obj}rot_${t[t.nearSide]}.webp`;
+      document.getElementById("choice-right").src = `objs/${t.obj}/${t.obj}rot_${t[t.farSide]}.webp`;
+    }
+
+    function recordResponse(choiceSide) {
+      const t = trials[trialIndex];
+      const participant = getParticipantID();
+      const choice = choiceSide === t.nearSide ? "near" : "far";
+
+      results.push({
+        participant,
+        object: t.obj,
+        ref: t.ref,
+        near: t.near,
+        far: t.far,
+        nearSide: t.nearSide,
+        choiceSide,
+        choice
+      });
+
+      trialIndex++;
+      if (trialIndex < trials.length) {
+        showTrial(trialIndex);
+      } else {
+        document.getElementById("trial").style.display = "none";
+        document.getElementById("end").style.display = "block";
+      }
+    }
+
+    document.querySelectorAll(".choice").forEach(el => {
+      el.addEventListener("click", e => {
+        const side = e.target.dataset.side;
+        recordResponse(side);
+      });
+    });
+
+    document.getElementById("download").addEventListener("click", () => {
+      const header = Object.keys(results[0]).join(",");
+      const rows = results.map(r => Object.values(r).join(",")).join("\\n");
+      const csv = `${header}\\n${rows}`;
+      const blob = new Blob([csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `triad_results_${getParticipantID()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    showTrial(trialIndex);
+  </script>
+</body>
+</html>
