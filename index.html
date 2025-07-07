@@ -5,18 +5,40 @@
   <title>Triad Experiment</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpsHX1o8xyekSiMgtQosfY-1L9ftSwDCY",
+      authDomain: "triad-experiment.firebaseapp.com",
+      projectId: "triad-experiment",
+      storageBucket: "triad-experiment.appspot.com",
+      messagingSenderId: "328967553527",
+      appId: "1:328967553527:web:cbb37fe8f04124fe872ef2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    window.db = db;
+    window.setDoc = setDoc;
+    window.collection = collection;
+    window.doc = doc;
+  </script>
 </head>
 <body>
-  <!-- PARTICIPANT INFORMATION -->
+  <!-- PARTICIPANT INFO -->
   <div id="info">
     <h1>Participant Information</h1>
     <div class="content-box">
       <h2>Inference in perception and oculomotor control</h2>
       <p><strong>Researcher:</strong> Dr. Emma Stewart<br><strong>Queen Mary Ethics Reference:</strong> PSY2024-22</p>
       <hr>
-      <p>We would like to invite you to be part of this research project... (full text)</p>
+      <p>We would like to invite you to take part in this research project... (full text)</p>
       <p>Please read <a href="https://www.qmul.ac.uk/governance-and-legal-services/media/arcs/policyzone/Privacy-Notice-for-Research-Participants.pdf" target="_blank">Queen Mary's privacy notice</a>.</p>
-      <p>Contact Georgie Keggin: g.keggin@qmul.ac.uk</p>
+      <p>Contact: Georgie Keggin – g.keggin@qmul.ac.uk</p>
       <button class="btn" onclick="showConsent()">Continue to Consent Form</button>
     </div>
   </div>
@@ -48,7 +70,7 @@
       <h1>Instructions</h1>
       <p>You will see a reference object and two options below.</p>
       <p>Choose the object most similar in shape and orientation to the reference.</p>
-      <p>Please respond as quickly and accurately as you can.</p>
+      <p>Click the image that matches best. Respond as quickly and accurately as possible.</p>
       <button class="btn" onclick="startExperiment()">Start</button>
     </div>
   </div>
@@ -81,23 +103,9 @@
     </div>
   </div>
 
-  <!-- SCRIPT -->
+  <!-- LOGIC -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBpsHX1o8xyekSiMgtQosfY-1L9ftSwDCY",
-      authDomain: "triad-experiment.firebaseapp.com",
-      projectId: "triad-experiment",
-      storageBucket: "triad-experiment.appspot.com",
-      messagingSenderId: "328967553527",
-      appId: "1:328967553527:web:cbb37fe8f04124fe872ef2"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const responsesRef = collection(db, "triadResponses");
+    import { doc, setDoc, collection } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
     const totalObjects = 75;
     const totalRotations = 37;
@@ -109,33 +117,33 @@
     let trialStartTime = null;
     let participantInfo = { age: "", sex: "", participant: "" };
 
-    function getParticipantID() {
+    const getParticipantID = () => {
       const params = new URLSearchParams(window.location.search);
       return params.get("PROLIFIC_PID") || "anonymous";
-    }
+    };
 
-    function randn_bm() {
+    const randn_bm = () => {
       let u = 0, v = 0;
       while (u === 0) u = Math.random();
       while (v === 0) v = Math.random();
       return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-    }
+    };
 
-    function sampleRotation(ref, sd = 2, min = 1) {
+    const sampleRotation = (ref, sd = 2, min = 1) => {
       let val;
       do {
         val = Math.round(ref + randn_bm() * sd);
       } while (Math.abs(val - ref) < min || val < 0 || val >= totalRotations);
       return val;
-    }
+    };
 
-    function shuffle(array) {
+    const shuffle = (array) => {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
-    }
+    };
 
     for (let obj = 1; obj <= totalObjects; obj++) {
       const ref = Math.floor(Math.random() * totalRotations);
@@ -143,11 +151,9 @@
       let far;
       do {
         far = sampleRotation(ref, sdNear * 2, minDiff);
-      } while (Math.abs(far - near) < minDiff || far === ref || near === ref || far === near);
+      } while (Math.abs(far - near) < minDiff || [ref, near].includes(far));
 
-      const nearDiff = Math.abs(near - ref);
-      const farDiff = Math.abs(far - ref);
-      if (farDiff < nearDiff) [near, far] = [far, near];
+      if (Math.abs(far - ref) < Math.abs(near - ref)) [near, far] = [far, near];
 
       const sides = shuffle(["near", "far"]);
       trials.push({
@@ -163,26 +169,21 @@
       });
     }
 
-    function showTrial(index) {
-      const t = trials[index];
-      document.getElementById("trial-count").textContent = `Trial ${index + 1} of ${trials.length}`;
+    const showTrial = (i) => {
+      const t = trials[i];
+      document.getElementById("trial-count").textContent = `Trial ${i + 1} of ${trials.length}`;
       document.getElementById("reference").src = `objs/${t.obj}/${t.obj}rot_${t.ref}.webp`;
       document.getElementById("choice-left").src = `objs/${t.obj}/${t.obj}rot_${t.leftRotation}.webp`;
       document.getElementById("choice-right").src = `objs/${t.obj}/${t.obj}rot_${t.rightRotation}.webp`;
       trialStartTime = Date.now();
-    }
+    };
 
-    function recordResponse(choiceSide) {
+    const recordResponse = (choiceSide) => {
       const t = trials[trialIndex];
       const rt = (Date.now() - trialStartTime) / 1000;
-      const validRT = rt >= 0.1 && rt <= 10;
 
-      if (validRT) {
+      if (rt >= 0.1 && rt <= 10) {
         results.push({
-          timestamp: new Date().toISOString(),
-          participant: participantInfo.participant,
-          age: participantInfo.age,
-          sex: participantInfo.sex,
           object: t.obj,
           ref: t.ref,
           near: t.near,
@@ -204,27 +205,29 @@
       } else {
         document.getElementById("trial").style.display = "none";
         document.getElementById("end").style.display = "block";
-        sendDataToFirestore(results);
+        uploadAllData();
+      }
+    };
+
+    async function uploadAllData() {
+      const docRef = doc(collection(db, "triadResponses"), participantInfo.participant);
+      try {
+        await setDoc(docRef, {
+          timestamp: new Date().toISOString(),
+          participant: participantInfo.participant,
+          age: participantInfo.age,
+          sex: participantInfo.sex,
+          trials: results
+        });
+        console.log("✅ All data uploaded");
+      } catch (err) {
+        console.error("❌ Upload failed:", err);
       }
     }
 
-    async function sendDataToFirestore(data) {
-      for (const trial of data) {
-        try {
-          await addDoc(responsesRef, trial);
-          console.log("✅ Saved:", trial);
-        } catch (error) {
-          console.error("❌ Error saving:", error);
-        }
-      }
-    }
-
-    document.querySelectorAll(".choice").forEach(el => {
-      el.addEventListener("click", e => {
-        const side = e.target.dataset.side;
-        recordResponse(side);
-      });
-    });
+    document.querySelectorAll(".choice").forEach(el =>
+      el.addEventListener("click", e => recordResponse(e.target.dataset.side))
+    );
 
     function showConsent() {
       document.getElementById("info").style.display = "none";
